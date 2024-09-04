@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Span.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epraduro <epraduro@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: epraduro <epraduro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 15:01:01 by epraduro          #+#    #+#             */
-/*   Updated: 2024/02/19 16:22:45 by epraduro         ###   ########.fr       */
+/*   Updated: 2024/09/04 19:21:36 by epraduro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 
-Span::Span(unsigned int nb): _N(nb), _size(0) {
-	this->_tab = new int[nb];
+Span::Span(unsigned int nb): _N(nb) {
 }
 
 Span::~Span() {
@@ -29,54 +28,52 @@ Span &Span::operator=(const Span &copy) {
 
 	std::cout << "Span assignation operator called" << std::endl;
 	this->_N = copy._N;
-	this->_size = copy._size;
-	this->_tab = copy._tab;
+	this->_val = copy._val;
 	return (*this);
 }
 
 void	Span::addNumber(int nb) {
 
-	if (this->_size == this->_N)
-		throw NotMoreAddNumber();
-	this->_tab[this->_size++] = nb;
-	
+	if (this->_val.size() == this->_N)
+		throw std::overflow_error("Too much numbers");
+	this->_val.push_back(nb);
 }
 
 int		Span::shortestSpan() {
 	
-	unsigned int i = 0;
-	unsigned int res;
-	unsigned int diff;
+	int diff;
 	
-	if (this->_size <= 1)
-		throw LowDistance();
+	if (this->_val.size() <= 1)
+		throw std::overflow_error("Not enough number");
+
+	std::vector<int> tmp = this->_val;
 	
-	res = 4294967295;	//unsigned int max value;
-	while (i < this->_size)
-	{
-		diff = abs(this->_tab[i] - this->_tab[i + 1]);
-		if (diff < res)
-			res = diff;
-		i++;
-	}
-	return (res);
+	int min = *std::min_element(tmp.begin(), tmp.end());
+	tmp.erase(std::min_element(tmp.begin(), tmp.end()));
+	int min2 = *std::min_element(tmp.begin(), tmp.end());
+	
+	diff = min2 - min;
+	
+	return diff;
 }
 
 int		Span::longestSpan() {
 	
-	unsigned int i = 0;
-	unsigned int res = 0;
-	unsigned int diff = 0;
+	int diff;
 	
-	if (this->_size <= 1)
-		throw LowDistance();
+	if (this->_val.size() <= 1)
+		throw std::overflow_error("Not enough number");
 	
-	while (i < this->_size)
-	{
-		diff = abs(this->_tab[i] - this->_tab[i + 1]);
-		if (diff > res)
-			res = diff;
-		i++;
-	}
-	return (res);
+	int min = *std::min_element(this->_val.begin(), this->_val.end());
+	int max = *std::max_element(this->_val.begin(), this->_val.end());
+
+	diff = max - min;
+
+	return diff;
+}
+
+void	Span::someAddnum(std::vector<int>::iterator start, std::vector<int>::iterator finish) {
+	
+	for (std::vector<int>::iterator i = start; i != finish; i++)
+		this->addNumber(*i);
 }

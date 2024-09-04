@@ -6,7 +6,7 @@
 /*   By: epraduro <epraduro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/17 13:54:05 by epraduro          #+#    #+#             */
-/*   Updated: 2024/08/14 13:05:46 by epraduro         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:46:48 by epraduro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,25 @@
 int main() {
 	
 	std::vector<int> vec;
-	vec.push_back(1);
+	vec.push_back(7);
 	vec.push_back(2);
 	vec.push_back(3);
 	vec.push_back(4);
 	vec.push_back(5);
 
 	int valueToFind = 6;
-	int valueToFind2 = 3;
-	int index = easyfind(vec, valueToFind);
-	int index2 = easyfind(vec, valueToFind2);
+	int valueToFind2 = 7;
 
-	if (index != -1) {
-		std::cout << "La valeur " << valueToFind << " a été trouvée à l'index : " << index << std::endl;
-	} else {
-		std::cout << "La valeur " << valueToFind << " n'a pas été trouvée dans le vecteur." << std::endl;
-	}
-	if (index2 != -1) {
-		std::cout << "La valeur " << valueToFind2 << " a été trouvée à l'index : " << index2 << std::endl;
-	} else {
-		std::cout << "La valeur " << valueToFind2 << " n'a pas été trouvée dans le vecteur." << std::endl;
-	}
+	std::vector<int>::iterator index;
+	std::vector<int>::iterator index2;
 
+	try {
+		index = easyfind(vec, valueToFind);
+		std::cout << "Element found: " << *index << std::endl;
+		index2 = easyfind(vec, valueToFind2);
+		std::cout << "Element found: " << *index2 << std::endl;
+	}	catch(Nooccurrencesfound &e) {
+		std::cerr << e.what() << std::endl;
+	}
 	return 0;
 }
